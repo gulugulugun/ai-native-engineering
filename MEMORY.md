@@ -341,198 +341,63 @@ bin/script/         # 脚本、二进制（可选）
 
 ---
 
-## AI 辅助开发体系建设方案（2026-04-03 定稿）
+## AI 原生研发闭环体系方案（v0.2，2026-04-06 重构）
 
 > 正式方案文档：`.codebuddy/plans/ai-native-engineering-scheme.md`
 >
-> **一句话目标**：通过 Rules 沉淀项目知识 + 契约驱动自动生成代码骨架 + MCP 打通外部工作流，让 AI 在真实需求中能以"较少人工干预"完成前后端开发闭环。
+> **一句话目标**：通过 Rules + Hooks + Memory + MCP + 阶段化工作流，把 AI 从"代码补全工具"提升为"可治理的研发执行体"——每个阶段有固定输入、明确约束和标准交付物，过程可追溯、结果可验证、经验可沉淀。
 
-### 核心思路
-
-参考业界「开发机 + System Prompt + Skills」方案，去掉不必要的 Web 平台层，直接利用 CodeBuddy IDE 原生能力（Rules / Skills / Plan / MCP）建立 AI 辅助开发体系。核心价值在于**知识沉淀**——让 AI 理解项目架构、开发工作流、UI 规范和契约管理。
-
-### 设计原则
-
-在实践中逐步沉淀的原则，指导 AI 辅助开发的决策和流程设计。
-
-1. **契约驱动，接口定义先行（Contract-First）**
-   - 后端开发的第一步不是写代码，是定义契约（proto/yaml）
-   - 契约是前后端的唯一真相源：AI 先查现有接口 → 草拟/修改契约 → 校验 → 提交 MR → 合并后自动生成代码骨架 → 最后才填充业务逻辑
-   - 好处：接口定义结构化、可校验、可自动生成代码，AI 最擅长处理这类有明确规范的任务
-
-2. **代码第一性，Rules 只补盲区**
-   - 能通过代码和 MCP 实时获取的信息不写进 Rules（避免过期）
-   - Rules 只写"代码看不出来的东西"：平台约束、路由禁忌、框架潜规则、历史坑点
-   - 流程逻辑通过 xcontract MCP 实时读取，保证代码第一准确性
-
-3. **反馈闭环，做完即提炼**
-   - 每次需求做完后，更新 Rules 中不准确或遗漏的部分
-   - AI 犯的错写进 `pitfalls.md`，确保不再犯同样的错
-
-### 能力映射
-
-| 业界做法 | CodeBuddy 对应方案 |
-|---------|-------------------|
-| System Prompt（项目架构、技术栈、目录结构） | **Rules**（`.codebuddy/rules/`） |
-| System Prompt（全栈开发工作流、判断逻辑） | **Rules 中的开发流程规范** |
-| ui-guide skill（布局模式、组件选择、样式约束） | **UI Guide Rule/Skill** 适配 TDesign |
-| proto-inspector skill（查询+对比接口） | **MCP 工具**（xcontract 已有现成的） |
-| feature-planner skill（需求→方案模板） | **Plan 模板 + 标准化方案流程** |
-
-### 执行路线图（四步，边做边验证）
+### 全流程设计（5 个阶段）
 
 ```
-第一步：选一个真实小需求 + 同步建立核心 Rules
-  ↓
-第二步：补 UI Guide（TDesign 组件规范 + 布局模式）
-  ↓
-第三步：再来一个需求，验证闭环
-  ↓
-第四步：迭代优化 + 批量复用
+需求与分析 → 方案设计 → 编码实现 → 测试与验证 → 归档与沉淀 → 反馈闭环（反哺下一轮）
 ```
 
-> **关键调整**：原来"先写 Rules → 再验证"改为"边写 Rules 边用真实需求验证"。
-> 没有具体范例参照，Rules 容易停留在"正确但无用的废话"。
+| 阶段 | 人的角色 | AI 的角色 | 核心交付物 |
+|------|---------|----------|-----------|
+| 需求与分析 | **主导** | 辅助：结构化需求、提取规则 | `requirement-analysis.md` |
+| 方案设计 | **主导** | 辅助：梳理现状、生成契约草案 | `contract-proposal.md` + `tasks.md` |
+| 编码实现 | 辅助 | **主导**：按任务逐步生成代码 | 符合契约的前后端代码 |
+| 测试与验证 | 辅助 | **主导**：生成用例、执行测试 | `test-cases.md` + lint/契约校验结果 |
+| 归档与沉淀 | **主导** | 辅助：提炼规则和记忆更新 | Rules / Memory / 模板更新 |
 
-### 每步产物清单
+### 核心设计原则
 
-#### 第一步：核心 Rules + 黄金路径
+- **契约驱动**：接口定义先行，编码前锁定字段和行为
+- **代码第一性**：能从代码和 MCP 获取的不重复堆进 Rules
+- **反馈闭环**：每次需求做完即更新 Rules / Memory / 测试资产
+- **原生能力先行**：优先用 CodeBuddy 原生能力，不过早引入框架
 
-| 产物 | 说明 |
-|------|------|
-| `rules/project-architecture.md` | 技术栈版本、目录结构约定、四项目关系、路由定义方式 |
-| `rules/frontend-workflow.md` | 前端新页面开发步骤：Page → Model → Service，路由注册 |
-| `rules/backend-workflow.md` | 后端新接口开发步骤：Controller → 契约，中间件配置 |
-| `rules/migration-guide.md` | 旧页面迁移改造步骤（Vue2→Vue3、Element→TDesign、Vuex→Composition API） |
-| `rules/pitfalls.md` | 常见坑与禁忌（Node 版本切换、XPage 路由刷新问题等） |
-| **黄金路径示例** | 一个从需求到前后端闭环的完整范例（选真实小需求） |
+### 参考来源分层与筛选原则
 
-#### 第二步：UI Guide
+后续吸收外部经验时，按三层看材料：
+- **业务内实践层**：优先判断是否贴合真实业务研发场景
+- **通用工程方法层**：借鉴 Skill 结构、验证门禁、流程表达方式
+- **底层思想层**：统一认知坐标，不直接作为方案命名
 
-| 产物 | 说明 |
-|------|------|
-| `rules/ui-guide.md` 或 Skill | TDesign 组件选择指南、布局模式（表单页/列表页/详情页）、Tailwind CSS 用法 |
+筛选四问：解决什么真实问题？属于哪一层？适配当前路线吗？该沉淀到哪里？
 
-#### 第三步：验证闭环
+### 体系支撑能力（已落地）
 
-| 产物 | 说明 |
-|------|------|
-| 第二个真实需求的实现 | 验证 Rules 是否足够让 AI 较少干预下完成开发 |
-| Rules 修订记录 | 根据实战反馈修正 Rules 中不准确或遗漏的部分 |
+| 层 | 已落地产物 | 作用 |
+|----|-----------|------|
+| Rules | 4 条：workspace-architecture / xpage-frontend-guardrails / xdc-backend-contract-guardrails / delivery-workflow | 项目约束与开发规范 |
+| Hooks | 2 个：session_start_context / pretool_guard | 上下文注入 + 运行时风险控制 |
+| Memory | MEMORY.md + context/current-task.md + handoff 模板 + memory-capture 模板 | 长期知识 + 任务上下文 + 交接 |
+| MCP | XContract（可用）/ 工蜂 Git（部分可用）/ iWiki（待接入） | 外部系统能力接入 |
 
-#### 第四步：迭代 + 复用
+### 实施路线与当前状态
 
-| 产物 | 说明 |
-|------|------|
-| 优化后的 Rules 体系 | 经过多轮验证的稳定版本 |
-| 迁移实践 | 开始将旧业务模块逐步迁移到新架构 |
+- [x] **第一阶段：最小可用原型**（已完成 2026-04-03）— Rules 4 条 + Hooks 2 个 + 模板 3 个
+- [x] **方案调研与外部实践对照**（已完成 2026-04-06）— Harness 思想 + KM/voucher 业务实践 + agent-skills 通用方法
+- [ ] **第二阶段：真实需求验证**（下一步）— 选一个真实需求走完整全流程，验证阶段化交付物
+- [ ] **第三阶段：持续沉淀** — 基于真实需求沉淀常用模板和轻量 SOP，Memory 拆分
+- [ ] **第四阶段：扩展增强** — 工蜂 Git 自动化、iWiki MCP、多 Agent 协作
 
-### 边界说明（先不做的事）
-
-- **不先覆盖历史全部业务迁移** — 先跑通新页面开发闭环
-- **不先做复杂审批流** — 审批/FSM 等复杂业务逻辑后续再说
-- **不先把 Skill 做得很重** — Rules 够用就不做 Skill，保持轻量
-- **不搞量化验收指标** — 验收标准就一条：拿真实需求，AI 能否在较少人工干预下跑通前后端闭环
-
-### 验收标准
-
-**一句话**：拿一个真实新需求，AI 能否在较少人工干预下，完成从"需求描述 → 前端 Page/Model/Service + 后端 Controller/契约 → 页面可运行"的闭环。能就过，不能就迭代 Rules。
-
-### Handoff 背景知识清单
-
-> 给其他 AI / 同事评估本方案时，至少需要提供以下 5 类背景：
-
-1. **项目结构背景**：四个项目分别干什么（旧前端 depositmisview、旧后端 lqp、新前端模板 queryopenorderlist、新后端模板 xdc_wxpay），哪个是旧、哪个是新，迁移方向是什么
-2. **架构差异背景**：旧前端 `Vue2 + Element + Webpack` → 新前端 `Vue3 + TDesign + Vite + XPage`；旧后端 `Egg/Koa + Protobuf RPC` → 新后端 `XDC Node SDK + OpenAPI`
-3. **开发约束背景**：`src/index.ts` 是新前端路由真相源、XPage 提供壳（布局由平台管理）、前后端通过 OpenAPI 契约对齐、`code !== 0` 视为失败
-4. **目标背景**：不是做通用 AI 产品，是做面向**当前项目迁移/新增需求**的 AI 辅助开发体系
-5. **黄金路径范例**：一个从需求到前后端闭环的具体示例（第一步中产出）
+> **当前状态**：方案 v0.2 已完成全流程设计改写，下一步是拿一个真实需求验证全流程的 5 个阶段。
 
 ### Harness Engineering 思想参考
 
-> 来源: OpenAI 博文 + OpenHarness 仓库 (github.com/HKUDS/OpenHarness) | 更新: 2026-04-03
+> 来源: OpenAI 博文 + OpenHarness 仓库 | 更新: 2026-04-03
 
-#### 核心概念
-
-Harness Engineering 是 2025-2026 年兴起的 AI 工程新范式。核心范式转移：工程师从"写代码"转向"设计让 AI 可靠运行的环境"。**Harness = 约束(Constraints) + 反馈(Feedback) + 控制系统(Control Systems)**——模型提供智能，Harness 提供手、眼、记忆和安全边界。OpenAI 内部实验：7 人团队用 Codex 从空仓库生成 100 万行代码、合并 1500 个 PR，约 10 倍效率提升。
-
-#### OpenHarness 子系统概览（11733 行 Python，44 倍轻于 Claude Code）
-
-| 子系统 | 核心作用 |
-|--------|---------|
-| **Engine** | Agent 循环（stream → tool-call → loop），支持并发工具执行 |
-| **Tools** | 43 个工具（文件/Shell/搜索/Web/MCP） |
-| **Skills** | 按需技能加载（.md 文件即 Prompt，三层栈：内置→用户→插件） |
-| **Prompts** | System Prompt 分段组装管线（环境+技能+项目指令+记忆） |
-| **Memory** | 持久化跨会话记忆（文件即数据库，项目隔离，查询感知注入） |
-| **Permissions** | 三级权限模式（PLAN→DEFAULT→FULL_AUTO），路径/命令级过滤 |
-| **Hooks** | Pre/Post 生命周期钩子，4 种执行器（命令/HTTP/LLM-Prompt/Agent） |
-| **Config** | 四层配置优先级（CLI > 环境变量 > 配置文件 > 默认值） |
-| **Coordinator** | 多 Agent 协调（团队注册 + 消息传递 + 角色分化） |
-| **Plugins** | 扩展生态（命令/钩子/Agent，兼容 claude-code/plugins） |
-
-#### 与我们现有体系的对比分析
-
-| OpenHarness 设计 | 我们可以迁移/已有的 | 优先级 |
-|------------------|-------------------|--------|
-| CLAUDE.md 项目指令（向上遍历发现） | ≈ 我们的 `rules/` 目录（CodeBuddy 自动注入） | ✅ 已在规划中 |
-| Prompt 分段组装管线 | CodeBuddy 原生支持（Rules 自动注入 system prompt） | ✅ 已具备 |
-| 截断防护（每段有字符/行数上限） | Rules 写精简版，详情留 MEMORY.md 按需读取 | ✅ 验证了方向 |
-| 技能按需加载（列表进 prompt，内容运行时注入） | 暂不需要（项目体量小，Rules 够用） | ⏸️ 后续可引入 |
-| Hook 拦截链（PreToolUse → 权限 → 执行 → PostToolUse） | CodeBuddy 已支持原生 Hooks，兼容 Claude Code Hooks，支持 `PreToolUse`/`PostToolUse` 等 7 类事件、运行时拦截、参数改写、项目/用户级配置 | ✅ 已具备，可优先落地验证 |
-| 查询感知记忆（根据用户输入搜索匹配记忆再注入） | MEMORY 手动读取，Rules 自动注入，策略已对 | ✅ 策略正确 |
-| 渐进式信任（PLAN→DEFAULT→FULL_AUTO） | 使用姿势层面，初期多确认，验证后逐步放手 | ✅ 自然演进 |
-
-#### 核心结论
-
-我们当前建设的是一套面向业务项目的 **AI 原生研发闭环体系**。它借鉴了 `Harness Engineering` 关于约束、反馈与控制系统的思想，但正式定位不是构建一个通用 `Harness`，而是优先利用 `CodeBuddy` 原生能力，把这些思想映射到业务研发执行闭环中。当前更合理的路径仍是**优先用 CodeBuddy 原生能力落地和验证**，而不是过早引入额外框架。
-
-#### 后续待办
-
-- [ ] 评估是否需要引入 OpenHarness 或类似轻量 Agent 框架来增强自动化能力（重点看原生 Hooks 无法覆盖的复杂场景，如多阶段治理链路、Agent 审查器、插件生态）
-- [x] 建立 CodeBuddy 原生能力最小可用原型（项目 Rules + SessionStart / PreToolUse Hooks + handoff / memory 模板）
-- [ ] 用真实需求验证该原型是否已足够满足现阶段需求，并据此继续收敛规则与治理链
-
-### 状态
-
-- [x] 方案制定 + GPT 评估 + 调整定稿（2026-04-03）
-- [x] 补充平台/框架文档认知 + 契约 MCP 闭环分析 + 业界实践借鉴（2026-04-03）
-- [x] Harness Engineering 概念学习 + OpenHarness 仓库分析 + 对比结论沉淀（2026-04-03）
-- [x] 建立第一版 CodeBuddy 原生研发闭环骨架（2026-04-03）
-  - [x] 创建项目 Rules：`workspace-architecture` / `xpage-frontend-guardrails` / `xdc-backend-contract-guardrails` / `delivery-workflow`
-  - [x] 创建项目级 Hooks 配置：`.codebuddy/settings.json`
-  - [x] 落地 Hooks 脚本：`.codebuddy/hooks/session_start_context.py` / `.codebuddy/hooks/pretool_guard.py`
-  - [x] 创建临时上下文与交接模板：`.codebuddy/context/current-task.md` / `.codebuddy/templates/handoff-template.md` / `.codebuddy/templates/memory-capture-template.md`
-- [ ] **第二步：用真实需求验证黄金路径**
-  - [ ] 用一个真实前端或后端需求验证 Rules + Hooks 是否有效
-  - [ ] 根据真实使用反馈精简 MEMORY.md，把稳定规则保留在 Rules，MEMORY 只保留索引与长期参考
-  - [ ] 评估是否还需要更复杂的治理链（多阶段 Hook、Agent 审查器、插件生态）
-- [ ] 第二步：UI Guide
-- [ ] 第三步：第二个需求验证闭环
-- [ ] 第四步：迭代优化 + 批量复用
-- [x] 已检查本轮新增文件，无多余临时文件需要清理（未发现 `.pyc` / `.tmp` / `.bak`；`rules/`、`hooks/`、`context/`、`templates/`、`settings.json` 均为预期产物）
-
-> **当前状态**：第一版 CodeBuddy 原生研发闭环骨架已完成，下一步是拿一个真实前端或后端需求验证 `Rules + Hooks + handoff/memory` 的黄金路径。
-
-### 与优先级清单对照（2026-04-03）
-
-#### 第一优先
-- [x] **Hooks 最小原型**：已完成。已落地 `SessionStart` + `PreToolUse`，覆盖项目上下文注入、高危命令拦截、敏感路径保护。
-- [x] **Rules 分层**：已完成第一版。已创建 4 条基础 Rules，但仍需在真实需求中继续收敛和精简。
-- [~] **常用 SOP 渐进沉淀**：调整为“基于真实需求逐步形成”，而不是预先一次性补齐 `plan` / `review` / `debug` / `test` / `commit` 模板。当前暂不作为先做事项。
-
-#### 第二优先
-- [ ] **MEMORY.md 拆成索引 + 主题文件**：未完成。当前仍以单个 `MEMORY.md` 为主，后续需拆成索引页 + 主题文件。
-- [x] **当前任务上下文文件化**：已完成。已创建 `.codebuddy/context/current-task.md`。
-- [x] **统一 handoff 模板**：已完成。已创建 `.codebuddy/templates/handoff-template.md`。
-
-#### 第三优先
-- [~] **模式化工作流**：部分完成。`delivery-workflow` 已写入默认工作流原则，但还没有正式落成 `Review-only` / `Implement` / `Fast-fix` 三种可执行模式。
-- [ ] **自动同步 issue/PR 摘要**：未完成。
-- [ ] **工蜂 / Git 自动化交付链路**：未完成。后续可接入工蜂 / Git 能力，覆盖分支推送、MR 创建 / 更新、评审状态查询。
-- [ ] **更强的多 agent 协作**：未完成。
-
-#### 结论
-- **已完成**：Hooks 最小原型、Rules 第一版分层、当前任务上下文化、统一 handoff 模板。
-- **部分完成**：模式化工作流（只有原则，还没有正式模式）、常用 SOP 的沉淀方向已明确但暂不预制模板。
-- **未完成**：MEMORY 拆分、issue/PR 自动摘要同步、工蜂 / Git 自动化交付链路、更强多 agent 协作。
+`Harness Engineering` 是本方案的**底层思想参考**，不是正式命名。核心思想：模型提供智能，Harness 提供约束、反馈和控制系统。我们把这些思想映射到 `CodeBuddy` 原生能力（Rules = 约束、Hooks = 控制、Memory = 反馈）上，而不是复制一个通用 Harness 框架。
