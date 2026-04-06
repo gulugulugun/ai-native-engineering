@@ -1,0 +1,21 @@
+---
+description: 
+alwaysApply: true
+enabled: true
+updatedAt: 2026-04-03T09:50:37.357Z
+provider: 
+---
+
+## 适用范围
+`queryopenorderlist` 及同类 XPage 前端任务。
+
+## 核心约束
+- `src/index.ts` 是路由唯一真相源；新增页面或菜单路由时优先修改它。
+- 平台内路由跳转必须优先使用 `window.wxpay.router`，不要直接依赖 `vue-router` 做宿主内导航。
+- 页面整体壳由 XPage 平台提供，不要重复实现全局 Header / Aside / Layout。
+- API 调用优先使用契约生成客户端；非契约场景再使用 `window.wxpay.request`。
+- 代码组织遵守 `Pages ↔ Models ↔ Services` 三层分离，避免把页面状态、接口请求、业务逻辑揉在一个组件里。
+
+## 注意事项
+- 新增路由页面后，如果右侧菜单已经识别到新路由，但预览出现“当前 router-view 无匹配的路由”，先刷新浏览器或编辑器再继续判断问题。
+- 多菜单共用一个模块时，注意路由前缀与菜单英文名规则。

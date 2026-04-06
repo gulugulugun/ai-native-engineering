@@ -1,0 +1,26 @@
+---
+description: 
+alwaysApply: true
+enabled: true
+updatedAt: 2026-04-03T09:50:37.356Z
+provider: 
+---
+
+## 适用范围
+整个工作区。
+
+## 项目识别
+- `payclient-oa-depositmisview`：旧前端，Vue 2 + Element UI + Webpack，主要作为迁移参考。
+- `lqp`：旧后端集合，历史实现以 Egg.js / Koa / Kite 为主，主要作为迁移参考。
+- `queryopenorderlist`：新前端模板，Vue 3 + Vite + TDesign + XPage，是前端目标架构。
+- `xdc_wxpay`：新后端模板，Node.js + XDC Node SDK，是后端目标架构。
+
+## 默认判断
+- 回答问题或改代码前，先识别当前工作属于哪个项目，再给对应建议。
+- 新需求、重构、能力收敛，优先向 `queryopenorderlist` + `xdc_wxpay` 的目标架构靠拢。
+- 涉及前后端联动时，优先保证 OpenAPI / 契约对齐，而不是先各自实现再补文档。
+
+## 禁止事项
+- 不要把旧前端的 Vue 2 / Element UI / Vuex 装饰器方案直接机械迁入 XPage 新模板。
+- 不要把旧后端的 Egg Service 分层习惯直接照搬进 XDC 新模板。
+- 不要混淆四个项目的职责和技术栈，避免给出跨项目错配建议。

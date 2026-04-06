@@ -1,0 +1,11 @@
+# 临时上下文
+context/current-task.md
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 编辑器临时文件
+*.swp
+*.swo
+.DS_Store
