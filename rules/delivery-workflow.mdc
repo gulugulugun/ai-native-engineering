@@ -49,3 +49,14 @@ requirement-analysis → spec → design → coding → testing → archiving
 - 任务跨会话时，使用 handoff 模板记录目标、已完成、风险和下一步。
 - 沉淀到 Memory 的内容必须是长期有效、可复用的经验，按四分类归档（Pattern / Pitfall / Preference / Architecture）。
 - 方案优先"CodeBuddy 原生能力先行"，避免过早引入额外框架。
+
+## 验证失败回流规则
+
+测试阶段发现问题时，先做根因分类再决定行动：
+
+- **实现问题**（代码 bug）→ 当前阶段直接修复。
+- **任务拆解问题**（粒度/依赖/DoD 不清晰）→ 回到 design 阶段。
+- **规格问题**（spec 歧义/接口缺失/约束遗漏）→ 回到 spec 阶段。
+- **需求问题**（需求理解错误/场景遗漏）→ 回到 requirement-analysis 阶段。
+
+跨层问题优先归到更上层。回流时必须说明回到哪个阶段、为什么、回流后关注什么。
