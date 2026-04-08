@@ -10,10 +10,42 @@ provider:
 整个工作区。
 
 ## 项目识别
-- `payclient-oa-depositmisview`：旧前端，Vue 2 + Element UI + Webpack，主要作为迁移参考。
-- `lqp`：旧后端集合，历史实现以 Egg.js / Koa / Kite 为主，主要作为迁移参考。
-- `queryopenorderlist`：新前端模板，Vue 3 + Vite + TDesign + XPage，是前端目标架构。
-- `xdc_wxpay`：新后端模板，Node.js + XDC Node SDK，是后端目标架构。
+
+| 项目 | 角色 | 技术栈 |
+|------|------|--------|
+| `queryopenorderlist` | **新前端模板（目标架构）** | Vue 3 + Vite + TDesign + XPage |
+| `xdc_wxpay` | **新后端模板（目标架构）** | Node.js + XDC Node SDK + OpenAPI |
+| `payclient-oa-depositmisview` | 旧前端（仅迁移参考） | Vue 2 + Element UI + Webpack |
+| `lqp` | 旧后端（仅迁移参考） | Egg.js / Koa / Kite |
+
+## 项目配置表
+
+> Skills 和 Agents 可通过 `{配置键}` 引用以下值。
+
+### queryopenorderlist（前端）
+
+| 配置项 | 配置键 | 值 |
+|--------|--------|-----|
+| 项目根目录 | `FE_ROOT` | `queryopenorderlist/mmpayqueryopenorderlisthtml` |
+| 页面目录 | `FE_PAGES_DIR` | `src/pages/` |
+| 路由入口 | `FE_ROUTER_ENTRY` | `src/index.ts` |
+| 组件目录 | `FE_COMPONENTS_DIR` | `src/components/` |
+| Model 目录 | `FE_MODELS_DIR` | `src/models/page-models/` |
+| Service 目录 | `FE_SERVICES_DIR` | `src/services/` |
+| 组合式函数目录 | `FE_COMPOSABLES_DIR` | `src/composables/` |
+| UI 组件库 | `FE_UI_LIB` | TDesign Vue Next (`tdesign-vue-next`) |
+| 样式方案 | `FE_STYLE` | Tailwind CSS |
+
+### xdc_wxpay（后端）
+
+| 配置项 | 配置键 | 值 |
+|--------|--------|-----|
+| 项目根目录 | `BE_ROOT` | `xdc_wxpay` |
+| Controller 目录 | `BE_CONTROLLER_DIR` | `src/controller/` |
+| Entity 目录 | `BE_ENTITY_DIR` | `src/entity/` |
+| 契约目录 | `BE_CONTRACT_DIR` | `.xdc/contract/` |
+| 契约文件 | `BE_OPENAPI_FILE` | `.xdc/contract/openapi.yaml` |
+| XDC 配置 | `BE_XDC_CONFIG` | `xdc.yml` |
 
 ## 默认判断
 - 回答问题或改代码前，先识别当前工作属于哪个项目，再给对应建议。

@@ -33,6 +33,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|write_to_file|replace_in_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /data/workspace/.codebuddy/hooks/post_lint_check.py",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

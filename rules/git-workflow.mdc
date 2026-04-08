@@ -1,0 +1,42 @@
+---
+description: Git 分支管理和提交规范。涉及 Git 操作时自动触发。
+alwaysApply: false
+enabled: true
+---
+
+## 分支管理
+
+### 核心原则
+- **永远不要直接在 master 分支上修改代码**
+- 所有开发工作必须在独立分支上进行
+- 新分支必须基于 master 最新代码创建
+
+### 分支命名
+- 格式：`feature/{简短描述}`（新功能）或 `fix/{简短描述}`（修复）
+- 示例：`feature/pending-order-query`、`fix/date-range-validation`
+- 使用短横线分隔单词
+
+### 多仓操作
+涉及前后端联动时，两个仓库使用**相同的分支名**：
+
+| 改动类型 | 涉及仓库 | Git 目录 |
+|---------|---------|---------|
+| 纯前端 | queryopenorderlist | `queryopenorderlist/` |
+| 纯后端 | xdc_wxpay | `xdc_wxpay/` |
+| 全栈 | 两个仓库 | 分别操作 |
+
+## Commit 规范
+
+| 类型 | 说明 | 示例 |
+|------|------|------|
+| `feat` | 新功能 | `feat: 新增待处理订单查询页面` |
+| `fix` | 修复 bug | `fix: 修复日期范围超限未拦截` |
+| `refactor` | 重构 | `refactor: 抽取查询参数校验逻辑` |
+| `style` | 样式调整 | `style: 调整表格列宽` |
+| `chore` | 构建/工具 | `chore: 更新契约依赖版本` |
+
+## 禁止事项
+
+- 禁止 `git push --force` 到 master
+- 禁止在未确认的情况下自动 commit（AI 不主动提交，除非用户明确要求）
+- 禁止跳过 pre-commit hooks（不使用 `--no-verify`）

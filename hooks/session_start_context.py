@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""SessionStart hook: inject project context and workflow guidance."""
 import json
 import os
 import sys
@@ -7,8 +8,9 @@ from pathlib import Path
 
 def detect_project(cwd: str) -> tuple[str, list[str]]:
     rules = [
-        "优先遵守项目 Rules，再结合当前任务上下文做分析和实现。",
+        "优先遵守项目 Rules（自动注入），再结合当前任务上下文做分析和实现。",
         "如本轮任务跨前后端，优先检查契约与接口一致性。",
+        "收到新需求时，先判断任务类型（Implement / Fast-fix / Review-only），再按 delivery-workflow Rule 中对应流程执行。",
     ]
 
     if "/queryopenorderlist/" in cwd:
@@ -19,6 +21,7 @@ def detect_project(cwd: str) -> tuple[str, list[str]]:
                 "`src/index.ts` 是路由唯一真相源。",
                 "平台内路由跳转优先使用 `window.wxpay.router`，不要直接依赖 `vue-router`。",
                 "API 调用优先使用契约生成客户端，非契约场景再用 `window.wxpay.request`。",
+                "代码组织遵守 Pages↔Models↔Services 三层分离。",
             ],
         )
     if "/xdc_wxpay/" in cwd:
@@ -33,18 +36,18 @@ def detect_project(cwd: str) -> tuple[str, list[str]]:
         )
     if "/payclient-oa-depositmisview/" in cwd:
         return (
-            "当前位于 `payclient-oa-depositmisview`（旧前端）",
+            "当前位于 `payclient-oa-depositmisview`（旧前端，仅作迁移参考）",
             rules
             + [
-                "该项目主要作为迁移参考，不要把旧实现机械复制到 XPage 新模板。",
+                "不要把旧实现机械复制到 XPage 新模板。",
             ],
         )
     if "/lqp/" in cwd:
         return (
-            "当前位于 `lqp`（旧后端集合）",
+            "当前位于 `lqp`（旧后端集合，仅作迁移参考）",
             rules
             + [
-                "该项目主要作为迁移参考，不要直接照搬 Egg / Service 分层到 XDC 新模板。",
+                "不要直接照搬 Egg / Service 分层到 XDC 新模板。",
             ],
         )
     return (
@@ -56,13 +59,22 @@ def detect_project(cwd: str) -> tuple[str, list[str]]:
 def main() -> None:
     raw = sys.stdin.read().strip() or "{}"
     payload = json.loads(raw)
-    cwd = str(payload.get("cwd") or os.environ.get("CODEBUDDY_PROJECT_DIR") or "/data/workspace")
-    workspace_root = Path(os.environ.get("CODEBUDDY_PROJECT_DIR") or "/data/workspace")
+    cwd = str(
+        payload.get("cwd")
+        or os.environ.get("CODEBUDDY_PROJECT_DIR")
+        or "/data/workspace"
+    )
+    workspace_root = Path(
+        os.environ.get("CODEBUDDY_PROJECT_DIR") or "/data/workspace"
+    )
     current_task = workspace_root / ".codebuddy" / "context" / "current-task.md"
 
     project_title, hints = detect_project(cwd)
+
     if current_task.exists():
-        hints.append(f"如任务有临时约束或交接信息，优先读取 `{current_task}`。")
+        hints.append(
+            f"如任务有临时约束或交接信息，优先读取 `{current_task}`。"
+        )
 
     additional_context = project_title + "。\n- " + "\n- ".join(hints)
     output = {
