@@ -4,6 +4,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from typing import Optional
 
 
 DESTRUCTIVE_COMMAND_PATTERNS = [
@@ -22,12 +23,20 @@ ASK_COMMAND_PATTERNS = [
     r"wget\b.*\|\s*(bash|sh)",
 ]
 
+PROCESS_ARTIFACT_NAMES = {
+    "requirement-analysis.md",
+    "spec.md",
+    "design-notes.md",
+    "tasks.md",
+    "test-cases.md",
+}
+
 WRITE_TOOL_NAMES = {"Write", "Edit", "write_to_file", "replace_in_file"}
 DELETE_TOOL_NAMES = {"Delete", "delete_file"}
 COMMAND_TOOL_NAMES = {"Bash", "execute_command"}
 
 
-def emit(decision: str, reason: str | None = None) -> None:
+def emit(decision: str, reason: Optional[str] = None) -> None:
     output = {
         "continue": decision != "deny",
         "hookSpecificOutput": {
@@ -42,7 +51,7 @@ def emit(decision: str, reason: str | None = None) -> None:
     json.dump(output, sys.stdout, ensure_ascii=False)
 
 
-def resolve_path(raw_path: str | None, cwd: str, workspace_root: Path) -> Path | None:
+def resolve_path(raw_path: Optional[str], cwd: str, workspace_root: Path) -> Optional[Path]:
     if not raw_path:
         return None
     path = Path(raw_path)
@@ -94,6 +103,10 @@ def main() -> None:
             resolved_str == codebuddy_dir or resolved_str.startswith(codebuddy_dir + os.sep)
         ):
             emit("deny", f"禁止删除 `.codebuddy` 目录下的文件: {resolved}")
+            return
+
+        if tool_name in DELETE_TOOL_NAMES and resolved.name in PROCESS_ARTIFACT_NAMES:
+            emit("ask", f"目标是流程产物文件，请确认是否继续删除: {resolved}")
             return
 
         if not (resolved == workspace_root or resolved_str.startswith(str(workspace_root) + os.sep)):

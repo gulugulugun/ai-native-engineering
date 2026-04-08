@@ -1,6 +1,6 @@
 # 工作区长期记忆（索引）
 
-> 最后更新: 2026-04-07
+> 最后更新: 2026-04-08
 >
 > 本文件是索引，详情按需读取对应主题文件。
 
@@ -22,6 +22,7 @@
 | `memory/project-architecture.md` | 四项目详细架构 + 对比表 + 迁移关系 | 需要了解项目结构、技术栈差异、迁移方向时 |
 | `memory/platform-and-framework.md` | wxpay 平台 API + XDC Kite 框架 + 契约管理 + 环境配置 | 开发前端页面（平台 API）或后端接口（框架约定）时 |
 | `memory/scheme-summary.md` | AI 研发闭环体系方案摘要 + 体系支撑表 + 实施路线 | 需要了解方案全貌、当前进展、体系产物时 |
+| `memory/external-practices.md` | 外部实践对照结论（KM / voucher / 信贷 MIS / Harness CLI / specmate / 开发知识库） | 判断外部经验是否已分析过、哪些可吸收/暂缓/仅参考时 |
 | `memory/2026-04-02.md` | 2026-04-02 工作日志 | 回顾历史决策时 |
 | `memory/2026-04-03.md` | 2026-04-03 工作日志 | 回顾历史决策时 |
 
