@@ -56,8 +56,8 @@
      - 定位: 零钱加系统对客服的 broker
 - **公共层**: `domain/mmpayxdcdepositlqpmisdao`（DAO 微服务）
 
-### 🟢 新模板一：queryopenorderlist（XPage 前端模板）
-- **路径**: `/data/workspace/queryopenorderlist/mmpayqueryopenorderlisthtml/`
+### 🟢 新模板一：mmpayproductpermissionhtml（XPage 前端模板）
+- **路径**: `/data/workspace/mmpayproductpermissionhtml/`
 - **定位**: XPage 低代码平台前端项目模板（重构目标架构）
 - **技术栈**: Vue 3.4 + TypeScript 5.4 + Vite 5.2 + TDesign Vue Next 1.9 + Tailwind CSS 4.1
 - **构建模式**: UMD 库（`script.umd.js` + `style.css`），供 XPage 平台加载
@@ -72,8 +72,8 @@
   - 外部依赖 externalize（vue/vue-router/tdesign/xpage-sdk 等由平台提供）
 - **示例页面**: 8 个页面（form-base, form-group, bind-merchant, query-open-order, card-form, form, step-form, api）
 
-### 🟢 新模板二：xdc_wxpay（XDC Node 后端模板）
-- **路径**: `/data/workspace/xdc_wxpay/`
+### 🟢 新模板二：mmpayxdcproductpermissionweb（XDC Node 后端模板）
+- **路径**: `/data/workspace/product_usage_permission_operations/app/mmpayxdcproductpermissionweb/`
 - **定位**: XDC 平台 Node.js 后端服务模板（重构目标架构）
 - **技术栈**: Node.js 20 + TypeScript + XDC Node SDK（`@xdc/node-sdk`）
 - **架构**: Controller 模式，`src/entry.ts` 注册 Controller + 中间件
@@ -85,7 +85,7 @@
 
 ## 四项目架构对比
 
-| 维度 | 旧前端 (depositmisview) | 旧后端 (lqp) | 新前端模板 (queryopenorderlist) | 新后端模板 (xdc_wxpay) |
+| 维度 | 旧前端 (depositmisview) | 旧后端 (lqp) | 新前端模板 (mmpayproductpermissionhtml) | 新后端模板 (mmpayxdcproductpermissionweb) |
 |---|---|---|---|---|
 | **Vue 版本** | Vue 2.7 | — | Vue 3.4 | — |
 | **Node 版本** | — | Node 12 (Egg), Node 10+ (Koa/Kite) | Node 18+ | Node 20 |
@@ -106,10 +106,10 @@
 
 ```
 旧前端 (depositmisview, Vue2+ElementUI+Webpack)
-  ──迁移→ 新前端模板 (queryopenorderlist, Vue3+TDesign+Vite+XPage)
+  ──迁移→ 新前端模板 (mmpayproductpermissionhtml, Vue3+TDesign+Vite+XPage)
 
 旧后端 (lqp/mmpayxdcdepositlqpmis, Egg.js)
-  ──迁移→ 新后端模板 (xdc_wxpay, XDC Node SDK)
+  ──迁移→ 新后端模板 (mmpayxdcproductpermissionweb, XDC Node SDK)
 ```
 
 核心变化：

@@ -13,9 +13,9 @@ def detect_project(cwd: str) -> tuple[str, list[str]]:
         "收到新需求时，先判断任务类型（Implement / Fast-fix / Review-only），再按 delivery-workflow Rule 中对应流程执行。",
     ]
 
-    if "/queryopenorderlist/" in cwd:
+    if "/mmpayproductpermissionhtml/" in cwd:
         return (
-            "当前位于 `queryopenorderlist`（XPage 前端模板）",
+            "当前位于 `mmpayproductpermissionhtml`（XPage 前端模板）",
             rules
             + [
                 "`src/index.ts` 是路由唯一真相源。",
@@ -24,9 +24,9 @@ def detect_project(cwd: str) -> tuple[str, list[str]]:
                 "代码组织遵守 Pages↔Models↔Services 三层分离。",
             ],
         )
-    if "/xdc_wxpay/" in cwd:
+    if "/mmpayxdcproductpermissionweb/" in cwd:
         return (
-            "当前位于 `xdc_wxpay`（XDC Node 后端模板）",
+            "当前位于 `mmpayxdcproductpermissionweb`（XDC Node 后端模板）",
             rules
             + [
                 "接口变更优先修改契约，再生成或对齐代码。",

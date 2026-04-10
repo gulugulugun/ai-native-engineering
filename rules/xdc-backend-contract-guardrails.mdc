@@ -7,7 +7,7 @@ provider:
 ---
 
 ## 适用范围
-`xdc_wxpay` 及同类 XDC Node 后端任务。
+`mmpayxdcproductpermissionweb` 及同类 XDC Node 后端任务。
 
 ## 核心约束
 - 接口变更优先修改契约，再生成或对齐代码；不要先手写 Controller 签名再回补契约。

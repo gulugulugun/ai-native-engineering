@@ -7,7 +7,7 @@ provider:
 ---
 
 ## 适用范围
-`queryopenorderlist` 及同类 XPage 前端任务。
+`mmpayproductpermissionhtml` 及同类 XPage 前端任务。
 
 ## 核心约束
 - `src/index.ts` 是路由唯一真相源；新增页面或菜单路由时优先修改它。

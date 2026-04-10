@@ -10,8 +10,8 @@
 
 | 项目 | 角色 | 技术栈 | 详情 |
 |------|------|--------|------|
-| `queryopenorderlist` | **新前端（目标架构）** | Vue 3 + TDesign + XPage | → `memory/project-architecture.md` |
-| `xdc_wxpay` | **新后端（目标架构）** | Node.js + XDC SDK + OpenAPI | → `memory/project-architecture.md` |
+| `mmpayproductpermissionhtml` | **新前端（目标架构）** | Vue 3 + TDesign + XPage | → `memory/project-architecture.md` |
+| `mmpayxdcproductpermissionweb` | **新后端（目标架构）** | Node.js + XDC SDK + OpenAPI | → `memory/project-architecture.md` |
 | `payclient-oa-depositmisview` | 旧前端（迁移参考） | Vue 2 + Element UI | → `memory/project-architecture.md` |
 | `lqp` | 旧后端（迁移参考） | Egg.js / Koa / Kite | → `memory/project-architecture.md` |
 
@@ -37,7 +37,7 @@
 ## 环境速记
 
 - Node >= 18.18.0，切换命令：`export NVM_DIR="/opt/nvm" && . "$NVM_DIR/nvm.sh" && nvm use 20`
-- XPage 重启：`cd /data/workspace/queryopenorderlist && curl -s http://wxpay.woa.com/xdc/wxpaymenuconfig/restart.sh | bash -s pro`
+- XPage 重启：`cd /data/workspace/mmpayproductpermissionhtml && curl -s http://wxpay.woa.com/xdc/wxpaymenuconfig/restart.sh | bash -s pro`
 
 ## 当前状态
 

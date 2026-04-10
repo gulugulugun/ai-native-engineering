@@ -21,8 +21,8 @@ enabled: true
 
 | 改动类型 | 涉及仓库 | Git 目录 |
 |---------|---------|---------|
-| 纯前端 | queryopenorderlist | `queryopenorderlist/` |
-| 纯后端 | xdc_wxpay | `xdc_wxpay/` |
+| 纯前端 | mmpayproductpermissionhtml | `mmpayproductpermissionhtml/` |
+| 纯后端 | mmpayxdcproductpermissionweb | `product_usage_permission_operations/app/mmpayxdcproductpermissionweb/` |
 | 全栈 | 两个仓库 | 分别操作 |
 
 ## Commit 规范

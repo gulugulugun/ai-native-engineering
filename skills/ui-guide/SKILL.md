@@ -6,7 +6,7 @@ allowed-tools: Read, Grep, Glob
 
 # XPage + TDesign UI 开发指南
 
-为前端项目 `queryopenorderlist` 提供 UI 开发规范和正向模板参考。
+为前端项目 `mmpayproductpermissionhtml` 提供 UI 开发规范和正向模板参考。
 
 ## 1. XPage 低代码模板速查
 

@@ -148,5 +148,5 @@ xdc.yml             # 统一配置
 
 ## 环境配置
 - Node 要求 >= 18.18.0，当前环境默认 Node 12，每次 npm install 前必须: `export NVM_DIR="/opt/nvm" && . "$NVM_DIR/nvm.sh" && nvm use 20`
-- XPage 服务器重启: `cd /data/workspace/queryopenorderlist && curl -s http://wxpay.woa.com/xdc/wxpaymenuconfig/restart.sh | bash -s pro`
-- Vite 本地开发: `cd mmpayqueryopenorderlisthtml && npm run start`（端口 9001）
+- XPage 服务器重启: `cd /data/workspace/mmpayproductpermissionhtml && curl -s http://wxpay.woa.com/xdc/wxpaymenuconfig/restart.sh | bash -s pro`
+- Vite 本地开发: `cd mmpayproductpermissionhtml && npm run start`（端口 9001）

@@ -8,7 +8,7 @@ allowed-tools: Read, Write, Edit, Bash, WebFetch, Task
 
 你正在执行 Implement 流程的**第 3 阶段：方案设计**。
 
-本阶段回答“怎么做”——先做代码搜证和澄清，再把 `spec.md` 转化为**可批次执行**的 `tasks.md`。
+本阶段回答"怎么做"——先做代码搜证和澄清，再把 `spec.md` 转化为**可批次执行**的 `tasks.md`。
 
 ## 前置条件
 
@@ -18,7 +18,7 @@ allowed-tools: Read, Write, Edit, Bash, WebFetch, Task
 
 - `tasks.md` 不再只是任务清单，也兼作 coding 阶段的**轻量状态文件**。
 - 代码搜证优先交给子代理 `design-clarifier`（或等价的 `Task / Subagent` 调用）做上下文隔离。
-- 只把真正阻塞的问题抛给人，其余默认决策沉淀到“自动决策记录”。
+- 只把真正阻塞的问题抛给人，其余默认决策沉淀到"自动决策记录"。
 
 ## 执行步骤
 
@@ -41,7 +41,7 @@ allowed-tools: Read, Write, Edit, Bash, WebFetch, Task
 
 1. 读取 `.codebuddy/context/clarifications.draft.md`。
 2. 若存在 `P0` 或无法默认处理的 `P1`，向人提问并 **STOP**，等待确认后再继续。
-3. 若人回复“你定 / 暂不确定”，采用草稿中的默认处理，并把该决策写进 `tasks.md` 的“自动决策记录”。
+3. 若人回复"你定 / 暂不确定"，采用草稿中的默认处理，并把该决策写进 `tasks.md` 的"自动决策记录"。
 4. `P2` 不向人追问，直接沉淀为设计阶段的默认决策。
 
 ### 4. 生成批次化 `tasks.md`
@@ -65,7 +65,8 @@ allowed-tools: Read, Write, Edit, Bash, WebFetch, Task
    - **验证**：怎么验证该任务完成
    - **回退**：如果做砸了怎么退
 5. `DoD` 里使用普通列表，不嵌套任务勾选框，避免 coding 阶段误判状态。
-6. 所有任务必须可追溯到 `spec.md` 的某一项，不允许“与任务 N 类似”这类模糊引用。
+6. 所有任务必须可追溯到 `spec.md` 的某一项，不允许"与任务 N 类似"这类模糊引用。
+7. 在所有批次详情之后，增加 `## 任务依赖关系` 部分，用 ASCII DAG 格式标注任务间的前后依赖和可并行关系（参考模板中的示例格式）。当前用于辅助人审查和串行执行时的排序判断。
 
 ### 5. 按需生成 `design-notes.md`
 

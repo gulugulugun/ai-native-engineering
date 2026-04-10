@@ -13,8 +13,8 @@ provider:
 
 | 项目 | 角色 | 技术栈 |
 |------|------|--------|
-| `queryopenorderlist` | **新前端模板（目标架构）** | Vue 3 + Vite + TDesign + XPage |
-| `xdc_wxpay` | **新后端模板（目标架构）** | Node.js + XDC Node SDK + OpenAPI |
+| `mmpayproductpermissionhtml` | **新前端模板（目标架构）** | Vue 3 + Vite + TDesign + XPage |
+| `mmpayxdcproductpermissionweb` | **新后端模板（目标架构）** | Node.js + XDC Node SDK + OpenAPI |
 | `payclient-oa-depositmisview` | 旧前端（仅迁移参考） | Vue 2 + Element UI + Webpack |
 | `lqp` | 旧后端（仅迁移参考） | Egg.js / Koa / Kite |
 
@@ -22,11 +22,11 @@ provider:
 
 > Skills 和 Agents 可通过 `{配置键}` 引用以下值。
 
-### queryopenorderlist（前端）
+### mmpayproductpermissionhtml（前端）
 
 | 配置项 | 配置键 | 值 |
 |--------|--------|-----|
-| 项目根目录 | `FE_ROOT` | `queryopenorderlist/mmpayqueryopenorderlisthtml` |
+| 项目根目录 | `FE_ROOT` | `mmpayproductpermissionhtml` |
 | 页面目录 | `FE_PAGES_DIR` | `src/pages/` |
 | 路由入口 | `FE_ROUTER_ENTRY` | `src/index.ts` |
 | 组件目录 | `FE_COMPONENTS_DIR` | `src/components/` |
@@ -36,11 +36,11 @@ provider:
 | UI 组件库 | `FE_UI_LIB` | TDesign Vue Next (`tdesign-vue-next`) |
 | 样式方案 | `FE_STYLE` | Tailwind CSS |
 
-### xdc_wxpay（后端）
+### mmpayxdcproductpermissionweb（后端）
 
 | 配置项 | 配置键 | 值 |
 |--------|--------|-----|
-| 项目根目录 | `BE_ROOT` | `xdc_wxpay` |
+| 项目根目录 | `BE_ROOT` | `product_usage_permission_operations/app/mmpayxdcproductpermissionweb` |
 | Controller 目录 | `BE_CONTROLLER_DIR` | `src/controller/` |
 | Entity 目录 | `BE_ENTITY_DIR` | `src/entity/` |
 | 契约目录 | `BE_CONTRACT_DIR` | `.xdc/contract/` |
@@ -49,7 +49,7 @@ provider:
 
 ## 默认判断
 - 回答问题或改代码前，先识别当前工作属于哪个项目，再给对应建议。
-- 新需求、重构、能力收敛，优先向 `queryopenorderlist` + `xdc_wxpay` 的目标架构靠拢。
+- 新需求、重构、能力收敛，优先向 `mmpayproductpermissionhtml` + `mmpayxdcproductpermissionweb` 的目标架构靠拢。
 - 涉及前后端联动时，优先保证 OpenAPI / 契约对齐，而不是先各自实现再补文档。
 
 ## 禁止事项
